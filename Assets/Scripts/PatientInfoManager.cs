@@ -1,15 +1,23 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PatientInfoManager : MonoBehaviour
 {
+    public string filePathToJSON;
     private float radius = 5f;
+    private JSONData rawData;
+    private JSONPatientCollection collection;
+    public Canvas canvas;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        GetInfoFromJSON();
+        collection = rawData.MoveToCollection(rawData.data);
+        //Debug.Log(rawData.data[0].name);
     }
 
     // Update is called once per frame
@@ -20,7 +28,20 @@ public class PatientInfoManager : MonoBehaviour
 
             //Get List of Objects nearby in radius
             PatientInfo nearestPatient = GetNearbyObjects();
-            if (nearestPatient) Debug.Log("<color=green> Getting Patient ID."+nearestPatient.patientIndex+" is the patient index.</color>");
+            if (nearestPatient) {
+                canvas.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = collection.patients[nearestPatient.patientIndex].name;
+            }
+        }
+    }
+
+    private void GetInfoFromJSON()
+    {
+        using (StreamReader stream = new StreamReader(filePathToJSON))
+        {
+            string json = stream.ReadToEnd();
+            rawData = JsonUtility.FromJson<JSONData>(json);
+            Debug.Log("JSON data loaded with count:<color=blue>" + rawData.data.Count + "</color>");
+
         }
     }
 
@@ -35,4 +56,25 @@ public class PatientInfoManager : MonoBehaviour
         if (patientInfos.Count > 0) return patientInfos[0];
         else return null;
     }
+}
+
+[System.Serializable]
+public class JSONData {
+
+    public List<JSONPatient> data;
+    public JSONPatientCollection collection = new JSONPatientCollection();
+
+    public JSONPatientCollection MoveToCollection(List<JSONPatient> dataObj) {
+        collection.patients = dataObj.ToArray();
+        return collection;
+    }
+}
+
+[System.Serializable]
+public class JSONPatient
+{
+    public int index;
+    public int age;
+    public string name;
+    public string gender;
 }

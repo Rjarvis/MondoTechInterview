@@ -389,6 +389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5eac91dc65fc724f94666c637aaf2cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  filePathToJSON: C:\Users\Reality Gaming 01\Documents\GitHub\SentinelUTechPortfolio\Assets\generated.json
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,6 +956,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patientIndex: 0
+  patientName: 0
 --- !u!136 &1036626006
 CapsuleCollider:
   m_ObjectHideFlags: 0
